@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import styles from "./Tracker.module.css";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "../lib/supabaseClient";
 
 const TEAM_MEMBERS = ["Haiqal", "Kase", "Taufik", "Chao Hao", "Rifqi"] as const;
 
@@ -18,7 +18,7 @@ const DEFAULT_TEMPLATE = [
   {
     category: "MANPOWER PLANNING",
     items: [
-      { name: "Appointment Holders (Neutral, Medic, Comd from other Coys)", daysOffset: -7 },
+      { name: "Appointment Holders (Neutral, Medic, Comds from other Coys)", daysOffset: -7 },
       { name: "Projected Strength Template", daysOffset: -5 },
     ],
   },
@@ -217,11 +217,12 @@ export default function Tracker() {
       .select()
       .single();
 
-    if (cErr) {
-      console.error(cErr);
-      return;
-    }
-
+if (cErr) {
+  alert("Conduct insert failed: " + cErr.message);
+  console.error(cErr);
+  return;
+}
+ 
     const itemsToInsert = DEFAULT_TEMPLATE.flatMap((cat) =>
       cat.items.map((it) => ({
         conduct_id: conductRow.id,
